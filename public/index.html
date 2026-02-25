@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Startup News Search</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+        input {
+            padding: 10px;
+            width: 300px;
+        }
+        button {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .news-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🚀 Startup News Search</h2>
+
+<input type="text" id="searchInput" placeholder="Type startup, AI, funding..." />
+<button onclick="searchNews()">Search</button>
+
+<div id="newsContainer"></div>
+
+<script>
+async function searchNews() {
+    const query = document.getElementById('searchInput').value;
+
+    if (!query) {
+        alert("Please enter something");
+        return;
+    }
+
+    const res = await fetch(`/search-news?q=${query}`);
+    const data = await res.json();
+
+    const container = document.getElementById('newsContainer');
+    container.innerHTML = "";
+
+    if (data.data && data.data.length > 0) {
+        data.data.forEach(news => {
+            container.innerHTML += `
+                <div class="news-card">
+                    <h3>${news.title}</h3>
+                    <p>${news.summary || ''}</p>
+                    <a href="${news.link}" target="_blank">Read More</a>
+                </div>
+            `;
+        });
+    } else {
+        container.innerHTML = "<p>No news found.</p>";
+    }
+}
+</script>
+
+</body>
+</html>
