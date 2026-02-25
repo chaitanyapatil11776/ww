@@ -1588,11 +1588,14 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
+app.set("trust proxy", 1);   // IMPORTANT for Vercel
 
 app.use(
   rateLimit({
     windowMs: 60 * 1000,
-    max: 30
+    max: 30,
+    standardHeaders: true,
+    legacyHeaders: false
   })
 );
 
