@@ -1568,7 +1568,6 @@
 
 
 
-
 // Load dotenv only in development
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
@@ -1579,7 +1578,6 @@ const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const axios = require("axios");
-const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
@@ -1599,49 +1597,45 @@ app.use(
 );
 
 /* ============================================
-   HEALTH CHECK ROUTE
+   HEALTH CHECK
 ============================================ */
 
 app.get("/", (req, res) => {
-  res.status(200).json({
+  res.json({
     status: "OK",
     message: "Startup Survival AI Running 🚀"
   });
 });
 
 /* ============================================
-   SAFE GEMINI GENERATION
+   SAFE GEMINI FUNCTION (DIRECT API CALL)
 ============================================ */
 
 async function safeGenerate(prompt, retries = 3, delay = 2000) {
   try {
     if (!process.env.GEMINI_API_KEY) {
-      return "Gemini API key not configured.";
+      return "Gemini API key missing.";
     }
 
-    const ai = new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY
-    });
+    const response = await axios.post(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        contents: [
+          {
+            parts: [{ text: prompt }]
+          }
+        ]
+      }
+    );
 
-    const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
-      contents: prompt
-    });
-
-    if (response?.text) return response.text;
-
-    if (response?.candidates?.length > 0) {
-      return (
-        response.candidates[0]?.content?.parts?.[0]?.text || ""
-      );
-    }
-
-    return "";
+    return (
+      response.data?.candidates?.[0]?.content?.parts?.[0]?.text || ""
+    );
 
   } catch (err) {
-    console.error("Gemini Error:", err.message);
+    console.error("Gemini Error:", err.response?.data || err.message);
 
-    if (err.message?.includes("429") && retries > 0) {
+    if (err.response?.status === 429 && retries > 0) {
       await new Promise(r => setTimeout(r, delay));
       return safeGenerate(prompt, retries - 1, delay * 2);
     }
@@ -1651,7 +1645,7 @@ async function safeGenerate(prompt, retries = 3, delay = 2000) {
 }
 
 /* ============================================
-   1️⃣ STARTUP ANALYSIS
+   STARTUP ANALYSIS
 ============================================ */
 
 app.post("/analyze", async (req, res) => {
@@ -1666,27 +1660,21 @@ app.post("/analyze", async (req, res) => {
     }
 
     const prompt = `
-Return ONLY raw valid JSON:
-
-{
-  "Executive Summary": "...",
-  "Problem Validation": "...",
-  "Market Opportunity": "...",
-  "Target Audience Insights": "...",
-  "Competitor Analysis": "...",
-  "Unique Differentiation": "...",
-  "Monetization Model": "...",
-  "Go-To-Market Strategy": "...",
-  "Financial Projection": "...",
-  "Risk Assessment": "...",
-  "AI Investment Score": "Numeric score with short explanation"
-}
+Analyze this startup idea professionally:
 
 Startup Idea: ${ideaName}
 Problem: ${problem}
 Target Audience: ${audience}
 Country: ${country}
 Budget: ${budget}
+
+Provide:
+- Executive summary
+- Market opportunity
+- Competitor overview
+- Monetization strategy
+- Risk assessment
+- Investment recommendation
 `;
 
     const result = await safeGenerate(prompt);
@@ -1697,13 +1685,13 @@ Budget: ${budget}
     });
 
   } catch (err) {
-    console.error("Analyze Route Error:", err.message);
+    console.error("Analyze Error:", err.message);
     res.status(500).json({ success: false });
   }
 });
 
 /* ============================================
-   2️⃣ MARKET ANALYSIS
+   MARKET ANALYSIS
 ============================================ */
 
 app.get("/api/market-analysis", async (req, res) => {
@@ -1713,14 +1701,7 @@ app.get("/api/market-analysis", async (req, res) => {
     if (!domain) {
       return res.status(400).json({
         success: false,
-        message: "Domain is required"
-      });
-    }
-
-    if (!process.env.RAPID_API_KEY) {
-      return res.status(500).json({
-        success: false,
-        message: "Rapid API key not configured"
+        message: "Domain required"
       });
     }
 
@@ -1751,7 +1732,7 @@ app.get("/api/market-analysis", async (req, res) => {
 });
 
 /* ============================================
-   3️⃣ STARTUP NEWS
+   STARTUP NEWS
 ============================================ */
 
 app.get("/api/startup-news", async (req, res) => {
@@ -1761,14 +1742,7 @@ app.get("/api/startup-news", async (req, res) => {
     if (!q) {
       return res.status(400).json({
         success: false,
-        message: "Search query required"
-      });
-    }
-
-    if (!process.env.RAPID_API_KEY) {
-      return res.status(500).json({
-        success: false,
-        message: "Rapid API key not configured"
+        message: "Query required"
       });
     }
 
@@ -1798,7 +1772,7 @@ app.get("/api/startup-news", async (req, res) => {
     console.error("News API Error:", error.message);
     res.status(500).json({
       success: false,
-      message: "Failed to fetch startup news"
+      message: "News API Error"
     });
   }
 });
