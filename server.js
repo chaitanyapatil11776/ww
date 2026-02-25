@@ -1569,8 +1569,10 @@
 
 
 
-
-require("dotenv").config();
+// Load dotenv only in development
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
 
 const express = require("express");
 const cors = require("cors");
@@ -1581,46 +1583,46 @@ const { GoogleGenAI } = require("@google/genai");
 
 const app = express();
 
-/* ===============================
-   🔐 SECURITY
-================================ */
+/* ============================================
+   SECURITY & MIDDLEWARE
+============================================ */
 
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-const limiter = rateLimit({
-  windowMs: 60 * 1000,
-  max: 30
-});
-app.use(limiter);
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 30
+  })
+);
 
-/* ===============================
-   🔑 ENV CHECK (DO NOT EXIT ON VERCEL)
-================================ */
+/* ============================================
+   HEALTH CHECK ROUTE
+============================================ */
 
-if (!process.env.GEMINI_API_KEY) {
-  console.log("⚠ GEMINI_API_KEY missing");
-}
-
-if (!process.env.RAPID_API_KEY) {
-  console.log("⚠ RAPID_API_KEY missing");
-}
-
-/* ===============================
-   🤖 GEMINI CONFIG
-================================ */
-
-const ai = new GoogleGenAI({
-  apiKey: process.env.GEMINI_API_KEY
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Startup Survival AI Running 🚀"
+  });
 });
 
-/* ===============================
-   SAFE AI GENERATION
-================================ */
+/* ============================================
+   SAFE GEMINI GENERATION
+============================================ */
 
 async function safeGenerate(prompt, retries = 3, delay = 2000) {
   try {
+    if (!process.env.GEMINI_API_KEY) {
+      return "Gemini API key not configured.";
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey: process.env.GEMINI_API_KEY
+    });
+
     const response = await ai.models.generateContent({
       model: "gemini-2.0-flash",
       contents: prompt
@@ -1629,14 +1631,17 @@ async function safeGenerate(prompt, retries = 3, delay = 2000) {
     if (response?.text) return response.text;
 
     if (response?.candidates?.length > 0) {
-      return response.candidates[0]?.content?.parts?.[0]?.text || "";
+      return (
+        response.candidates[0]?.content?.parts?.[0]?.text || ""
+      );
     }
 
     return "";
-  } catch (err) {
-    console.log("AI Error:", err.message);
 
-    if (err.message.includes("429") && retries > 0) {
+  } catch (err) {
+    console.error("Gemini Error:", err.message);
+
+    if (err.message?.includes("429") && retries > 0) {
       await new Promise(r => setTimeout(r, delay));
       return safeGenerate(prompt, retries - 1, delay * 2);
     }
@@ -1646,15 +1651,7 @@ async function safeGenerate(prompt, retries = 3, delay = 2000) {
 }
 
 /* ============================================
-   ROOT ROUTE
-============================================ */
-
-app.get("/", (req, res) => {
-  res.json({ message: "Startup Survival AI Running 🚀" });
-});
-
-/* ============================================
-   1️⃣ MAIN STARTUP REPORT
+   1️⃣ STARTUP ANALYSIS
 ============================================ */
 
 app.post("/analyze", async (req, res) => {
@@ -1662,7 +1659,10 @@ app.post("/analyze", async (req, res) => {
     const { ideaName, problem, audience, country, budget } = req.body;
 
     if (!ideaName || !problem || !audience || !country || !budget) {
-      return res.json({ success: false, message: "Missing fields" });
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields"
+      });
     }
 
     const prompt = `
@@ -1689,16 +1689,15 @@ Country: ${country}
 Budget: ${budget}
 `;
 
-    const raw = await safeGenerate(prompt);
+    const result = await safeGenerate(prompt);
 
-    if (!raw) {
-      return res.json({ success: false, message: "AI failed" });
-    }
-
-    res.json({ success: true, result: raw });
+    res.json({
+      success: true,
+      result
+    });
 
   } catch (err) {
-    console.log("Analyze Error:", err.message);
+    console.error("Analyze Route Error:", err.message);
     res.status(500).json({ success: false });
   }
 });
@@ -1709,10 +1708,20 @@ Budget: ${budget}
 
 app.get("/api/market-analysis", async (req, res) => {
   try {
-    const domain = req.query.domain;
+    const { domain } = req.query;
 
     if (!domain) {
-      return res.status(400).json({ message: "Domain is required" });
+      return res.status(400).json({
+        success: false,
+        message: "Domain is required"
+      });
+    }
+
+    if (!process.env.RAPID_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        message: "Rapid API key not configured"
+      });
     }
 
     const response = await axios.get(
@@ -1721,21 +1730,23 @@ app.get("/api/market-analysis", async (req, res) => {
         params: { domain },
         headers: {
           "x-rapidapi-key": process.env.RAPID_API_KEY,
-          "x-rapidapi-host": "similarweb-insights.p.rapidapi.com"
+          "x-rapidapi-host":
+            "similarweb-insights.p.rapidapi.com"
         }
       }
     );
 
-    const visits = response.data.Visits || 0;
-
     res.json({
-      domain,
-      visits
+      success: true,
+      data: response.data
     });
 
   } catch (error) {
     console.error("Market API Error:", error.message);
-    res.status(500).json({ message: "Market API Error" });
+    res.status(500).json({
+      success: false,
+      message: "Market API Error"
+    });
   }
 });
 
@@ -1745,31 +1756,42 @@ app.get("/api/market-analysis", async (req, res) => {
 
 app.get("/api/startup-news", async (req, res) => {
   try {
-    const query = req.query.q;
+    const { q } = req.query;
 
-    if (!query) {
-      return res.status(400).json({ message: "Search query required" });
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        message: "Search query required"
+      });
+    }
+
+    if (!process.env.RAPID_API_KEY) {
+      return res.status(500).json({
+        success: false,
+        message: "Rapid API key not configured"
+      });
     }
 
     const response = await axios.get(
       "https://real-time-news-data.p.rapidapi.com/search",
       {
         params: {
-          query,
+          query: q,
           limit: 10,
           country: "US",
           lang: "en"
         },
         headers: {
           "x-rapidapi-key": process.env.RAPID_API_KEY,
-          "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
+          "x-rapidapi-host":
+            "real-time-news-data.p.rapidapi.com"
         }
       }
     );
 
     res.json({
       success: true,
-      results: response.data.data
+      results: response.data?.data || []
     });
 
   } catch (error) {
@@ -1782,7 +1804,7 @@ app.get("/api/startup-news", async (req, res) => {
 });
 
 /* ============================================
-   EXPORT FOR VERCEL (IMPORTANT)
+   EXPORT FOR VERCEL
 ============================================ */
 
 module.exports = app;
