@@ -9,326 +9,10 @@
 
 
 
-// // // /* =====================================
-// // //    🚀 STARTUP SURVIVAL AI - MEDIUM MODE
-// // //    Clean JSON API for React Native
-// // // ===================================== */
 
-// // // require("dotenv").config();
 
-// // // const express = require("express");
-// // // const cors = require("cors");
-// // // const rateLimit = require("express-rate-limit");
-// // // const helmet = require("helmet");
-// // // const { GoogleGenAI } = require("@google/genai");
 
-// // // const app = express();
-// // // const PORT = 3000;
 
-// // // /* ===============================
-// // //    🔐 SECURITY
-// // // ================================ */
-
-// // // app.use(helmet());
-// // // app.use(cors());
-// // // app.use(express.json());
-
-// // // const limiter = rateLimit({
-// // //   windowMs: 60 * 1000,
-// // //   max: 30
-// // // });
-// // // app.use(limiter);
-
-// // // /* ===============================
-// // //    🔑 GEMINI CONFIG
-// // // ================================ */
-
-// // // if (!process.env.GEMINI_API_KEY) {
-// // //   console.log("❌ Add GEMINI_API_KEY in .env file");
-// // //   process.exit(1);
-// // // }
-
-// // // const ai = new GoogleGenAI({
-// // //   apiKey: process.env.GEMINI_API_KEY
-// // // });
-
-// // // /* ===============================
-// // //    🔁 SAFE GENERATE
-// // // ================================ */
-
-// // // async function safeGenerate(prompt) {
-// // //   try {
-// // //     const response = await ai.models.generateContent({
-// // //       model: "gemini-2.0-flash",
-// // //       contents: prompt
-// // //     });
-
-// // //     if (response?.text) return response.text;
-
-// // //     if (response?.candidates?.length > 0) {
-// // //       return response.candidates[0]?.content?.parts?.[0]?.text || "";
-// // //     }
-
-// // //     return "";
-// // //   } catch (err) {
-// // //     console.log("AI Error:", err.message);
-// // //     return "AI generation failed.";
-// // //   }
-// // // }
-
-// // // /* ===============================
-// // //    📊 MAIN REPORT ROUTE
-// // // ================================ */
-
-// // // app.post("/analyze", async (req, res) => {
-// // //   try {
-// // //     const { ideaName, problem, audience, country, budget } = req.body;
-
-// // //     if (!ideaName || !problem || !audience || !country || !budget) {
-// // //       return res.json({ success: false });
-// // //     }
-
-// // //     global.latestInput = {
-// // //       ideaName,
-// // //       problem,
-// // //       audience,
-// // //       country,
-// // //       budget
-// // //     };
-
-// // //     const prompt = `
-// // // You are a venture capitalist.
-
-// // // Return ONLY raw valid JSON.
-// // // Each section should be 150–300 words.
-// // // Keep it professional and medium-length.
-// // // Avoid very long explanations.
-
-// // // {
-// // //   "Executive Summary": "...",
-// // //   "Problem Validation": "...",
-// // //   "Market Opportunity": "...",
-// // //   "Target Audience Insights": "...",
-// // //   "Competitor Analysis": "...",
-// // //   "Unique Differentiation": "...",
-// // //   "Monetization Model": "...",
-// // //   "Go-To-Market Strategy": "...",
-// // //   "Financial Projection": "...",
-// // //   "Risk Assessment": "...",
-// // //   "AI Investment Score": "Numeric score with short explanation"
-// // // }
-
-// // // Startup Idea: ${ideaName}
-// // // Problem: ${problem}
-// // // Target Audience: ${audience}
-// // // Country: ${country}
-// // // Budget: ${budget}
-// // // `;
-
-// // //     const raw = await safeGenerate(prompt);
-
-// // //     let cleaned = raw.trim();
-
-// // //     if (cleaned.startsWith("```")) {
-// // //       cleaned = cleaned.replace(/```json/g, "")
-// // //                        .replace(/```/g, "")
-// // //                        .trim();
-// // //     }
-
-// // //     const first = cleaned.indexOf("{");
-// // //     const last = cleaned.lastIndexOf("}");
-
-// // //     if (first !== -1 && last !== -1) {
-// // //       cleaned = cleaned.substring(first, last + 1);
-// // //     }
-
-// // //     const report = JSON.parse(cleaned);
-
-// // //     global.latestReport = report;
-
-// // //     res.json({
-// // //       success: true,
-// // //       sections: Object.keys(report)
-// // //     });
-
-// // //   } catch (err) {
-// // //     console.log("Server Error:", err.message);
-// // //     res.json({ success: false });
-// // //   }
-// // // });
-
-// // // /* ===============================
-// // //    🔍 MEDIUM DETAIL SECTION ROUTE
-// // // ================================ */
-
-// // // app.get("/section/:name", async (req, res) => {
-// // //   try {
-// // //     const sectionName = req.params.name;
-
-// // //     if (!global.latestInput) {
-// // //       return res.json({ success: false });
-// // //     }
-
-// // //     const { ideaName, problem, audience, country, budget } =
-// // //       global.latestInput;
-
-// // //     const prompt = `
-// // // You are a venture capitalist.
-
-// // // Generate a MEDIUM-LENGTH professional analysis (300–500 words)
-// // // for the section: "${sectionName}"
-
-// // // Startup Idea: ${ideaName}
-// // // Problem: ${problem}
-// // // Target Audience: ${audience}
-// // // Country: ${country}
-// // // Budget: ${budget}
-
-// // // Guidelines:
-// // // - Structured with small subheadings
-// // // - Clear and readable
-// // // - Practical investor tone
-// // // - Include relevant numbers where useful
-// // // - Avoid excessive detail
-// // // `;
-
-// // //     const content = await safeGenerate(prompt);
-
-// // //     res.json({
-// // //       success: true,
-// // //       content
-// // //     });
-
-// // //   } catch (err) {
-// // //     res.json({ success: false });
-// // //   }
-// // // });
-
-// // // /* ===============================
-// // //    🚀 START SERVER
-// // // ================================ */
-
-// // // // app.listen(PORT, () => {
-// // // //   console.log("🚀 Server running at http://10.206.228.30:3000");
-// // // // });
-
-
-// // // app.listen(PORT, "0.0.0.0", () => {
-// // //   console.log(`🚀 Server running at http://10.171.41.30:${PORT}`);
-// // // });
-
-
-
-
-
-
-
-
-
-
-// // ///---------------------rapidapi-------------
-
-// // // require("dotenv").config();
-// // // const express = require("express");
-// // // const axios = require("axios");
-// // // const cors = require("cors");
-// // // const path = require("path");
-
-// // // const app = express();
-// // // app.use(cors());
-// // // app.use(express.json());
-// // // app.use(express.static(path.join(__dirname, "public")));
-
-// // // const PORT = 5000;
-
-// // // // API Route
-// // // app.get("/api/analyze", async (req, res) => {
-// // //   const domain = req.query.domain;
-
-// // //   if (!domain) {
-// // //     return res.status(400).json({ message: "Domain is required" });
-// // //   }
-
-// // //   try {
-// // //     const response = await axios.get(
-// // //       "https://similarweb-insights.p.rapidapi.com/traffic",
-// // //       {
-// // //         params: { domain },
-// // //         headers: {
-// // //           "x-rapidapi-key": process.env.RAPID_API_KEY,
-// // //           "x-rapidapi-host": "similarweb-insights.p.rapidapi.com",
-// // //         },
-// // //       }
-// // //     );
-
-// // //     const visits = response.data.Visits;
-
-// // //     // Competition Level
-// // //     let competitionLevel = "";
-// // //     let competitionScore = 0;
-
-// // //     if (visits > 10000000) {
-// // //       competitionLevel = "Very High";
-// // //       competitionScore = 90;
-// // //     } else if (visits > 1000000) {
-// // //       competitionLevel = "High";
-// // //       competitionScore = 75;
-// // //     } else if (visits > 100000) {
-// // //       competitionLevel = "Medium";
-// // //       competitionScore = 50;
-// // //     } else {
-// // //       competitionLevel = "Low";
-// // //       competitionScore = 25;
-// // //     }
-
-// // //     // Risk Assessment
-// // //     let riskLevel = competitionScore > 80 ? "High Risk" :
-// // //                     competitionScore > 60 ? "Moderate Risk" :
-// // //                     "Low Risk";
-
-// // //     // Startup Health Score (Simple Logic)
-// // //     const marketScore = 80; // Assume good demand for now
-// // //     const healthScore = Math.round(
-// // //       (marketScore * 0.4) +
-// // //       ((100 - competitionScore) * 0.6)
-// // //     );
-
-// // //     res.json({
-// // //       domain,
-// // //       visits,
-// // //       competitionLevel,
-// // //       competitionScore,
-// // //       riskLevel,
-// // //       startupHealthScore: healthScore
-// // //     });
-
-// // //   } catch (error) {
-// // //     console.error(error.response?.data || error.message);
-// // //     res.status(500).json({ message: "API Error" });
-// // //   }
-// // // });
-
-// // // app.listen(PORT, () => {
-// // //   console.log(`Server running at http://localhost:${PORT}`);
-// // // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// /* ============================================
-//    🚀 STARTUP SURVIVAL AI - FULL PRO VERSION
-//    Gemini + SimilarWeb Integrated
-// ============================================ */
 
 // require("dotenv").config();
 
@@ -337,1122 +21,274 @@
 // const rateLimit = require("express-rate-limit");
 // const helmet = require("helmet");
 // const axios = require("axios");
-// const { GoogleGenAI } = require("@google/genai");
-
+// const https = require("https");
+// const googleTrends = require('google-trends-api');
 // const app = express();
 
-// /* ===============================
+// /* =================================================
 //    🔐 SECURITY
-// ================================ */
-// app.use(helmet());
-// app.use(cors());
-// app.use(express.json());
-
-// const limiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 30
-// });
-// app.use(limiter);
-
-// /* ===============================
-//    🔑 ENV VALIDATION
-// ================================ */
-
-// if (!process.env.GEMINI_API_KEY) {
-//   console.log("❌ Missing GEMINI_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// if (!process.env.RAPID_API_KEY) {
-//   console.log("❌ Missing RAPID_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// /* ===============================
-//    🔑 GEMINI CONFIG
-// ================================ */
-
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GEMINI_API_KEY
-// });
-
-// /* ===============================
-//    🔁 SAFE AI GENERATION
-// ================================ */
-
-// async function safeGenerate(prompt) {
-//   try {
-//     const response = await ai.models.generateContent({
-//       model: "gemini-2.0-flash",
-//       contents: prompt
-//     });
-
-//     if (response?.text) return response.text;
-
-//     if (response?.candidates?.length > 0) {
-//       return response.candidates[0]?.content?.parts?.[0]?.text || "";
-//     }
-
-//     return "";
-//   } catch (err) {
-//     console.log("AI Error:", err.message);
-//     return "AI generation failed.";
-//   }
-// }
-
-// /* ============================================
-//    📊 1️⃣ MAIN STARTUP REPORT (UNCHANGED LOGIC)
-// ============================================ */
-
-// app.post("/analyze", async (req, res) => {
-//   try {
-//     const { ideaName, problem, audience, country, budget } = req.body;
-
-//     if (!ideaName || !problem || !audience || !country || !budget) {
-//       return res.json({ success: false });
-//     }
-
-//     global.latestInput = {
-//       ideaName,
-//       problem,
-//       audience,
-//       country,
-//       budget
-//     };
-
-//     const prompt = `
-// You are a venture capitalist.
-
-// Return ONLY raw valid JSON.
-// Each section should be 150–300 words.
-// Keep it professional and medium-length.
-// Avoid very long explanations.
-
-// {
-//   "Executive Summary": "...",
-//   "Problem Validation": "...",
-//   "Market Opportunity": "...",
-//   "Target Audience Insights": "...",
-//   "Competitor Analysis": "...",
-//   "Unique Differentiation": "...",
-//   "Monetization Model": "...",
-//   "Go-To-Market Strategy": "...",
-//   "Financial Projection": "...",
-//   "Risk Assessment": "...",
-//   "AI Investment Score": "Numeric score with short explanation"
-// }
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
-
-//     const raw = await safeGenerate(prompt);
-
-//     let cleaned = raw.trim();
-
-//     if (cleaned.startsWith("```")) {
-//       cleaned = cleaned.replace(/```json/g, "")
-//                        .replace(/```/g, "")
-//                        .trim();
-//     }
-
-//     const first = cleaned.indexOf("{");
-//     const last = cleaned.lastIndexOf("}");
-
-//     if (first !== -1 && last !== -1) {
-//       cleaned = cleaned.substring(first, last + 1);
-//     }
-
-//     const report = JSON.parse(cleaned);
-
-//     global.latestReport = report;
-
-//     res.json({
-//       success: true,
-//       sections: Object.keys(report)
-//     });
-
-//   } catch (err) {
-//     console.log("Server Error:", err.message);
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🔍 2️⃣ MEDIUM DETAIL SECTION ROUTE
-// ============================================ */
-
-// app.get("/section/:name", async (req, res) => {
-//   try {
-//     const sectionName = req.params.name;
-
-//     if (!global.latestInput) {
-//       return res.json({ success: false });
-//     }
-
-//     const { ideaName, problem, audience, country, budget } =
-//       global.latestInput;
-
-//     const prompt = `
-// You are a venture capitalist.
-
-// Generate a MEDIUM-LENGTH professional analysis (300–500 words)
-// for the section: "${sectionName}"
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-
-// - Structured with small subheadings
-// - Clear investor tone
-// - Practical insights
-// - Include relevant numbers where useful
-// `;
-
-//     const content = await safeGenerate(prompt);
-
-//     res.json({
-//       success: true,
-//       content
-//     });
-
-//   } catch (err) {
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🌍 3️⃣ MARKET COMPETITION ANALYSIS (RapidAPI)
-// ============================================ */
-
-// app.get("/api/market-analysis", async (req, res) => {
-//   try {
-//     const domain = req.query.domain;
-
-//     if (!domain) {
-//       return res.status(400).json({ message: "Domain is required" });
-//     }
-
-//     const response = await axios.get(
-//       "https://similarweb-insights.p.rapidapi.com/traffic",
-//       {
-//         params: { domain },
-//         headers: {
-//           "x-rapidapi-key": process.env.RAPID_API_KEY,
-//           "x-rapidapi-host": process.env.RAPID_API_HOST
-//         }
-//       }
-//     );
-
-//     const visits = response.data.Visits || 0;
-
-//     let competitionLevel = "";
-//     let competitionScore = 0;
-
-//     if (visits > 10000000) {
-//       competitionLevel = "Very High";
-//       competitionScore = 90;
-//     } else if (visits > 1000000) {
-//       competitionLevel = "High";
-//       competitionScore = 75;
-//     } else if (visits > 100000) {
-//       competitionLevel = "Medium";
-//       competitionScore = 50;
-//     } else {
-//       competitionLevel = "Low";
-//       competitionScore = 25;
-//     }
-
-//     const riskLevel =
-//       competitionScore > 80
-//         ? "High Risk"
-//         : competitionScore > 60
-//         ? "Moderate Risk"
-//         : "Low Risk";
-
-//     const marketScore = 80;
-
-//     const startupHealthScore = Math.round(
-//       (marketScore * 0.4) +
-//       ((100 - competitionScore) * 0.6)
-//     );
-
-//     res.json({
-//       domain,
-//       visits,
-//       competitionLevel,
-//       competitionScore,
-//       riskLevel,
-//       startupHealthScore
-//     });
-
-//   } catch (error) {
-//     console.error(error.response?.data || error.message);
-//     res.status(500).json({ message: "Market API Error" });
-//   }
-// });
-
-// /* ============================================
-//    🚀 START SERVER
-// ============================================ */
-
-// const PORT = process.env.PORT || 3000;
-
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`🚀 Server running on port ${PORT}`);
-// });
-
-
-/* ============================================
-   🚀 STARTUP SURVIVAL AI - FULL PRO VERSION
-   Gemini + SimilarWeb + Startup News
-============================================ */
-
-// require("dotenv").config();
-
-// const express = require("express");
-// const cors = require("cors");
-// const rateLimit = require("express-rate-limit");
-// const helmet = require("helmet");
-// const axios = require("axios");
-// const { GoogleGenAI } = require("@google/genai");
-
-// const app = express();
-
-// /* ===============================
-//    🔐 SECURITY
-// ================================ */
+// ================================================= */
 
 // app.use(helmet());
 // app.use(cors());
 // app.use(express.json());
 
-// const limiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 30
-// });
-// app.use(limiter);
+// app.use(
+//   rateLimit({
+//     windowMs: 60 * 1000,
+//     max: 30,
+//     message: { success: false, message: "Too many requests" }
+//   })
+// );
 
-// /* ===============================
-//    🔑 ENV VALIDATION
-// ================================ */
+// /* =================================================
+//    🔑 ENV CHECK
+// ================================================= */
 
-// if (!process.env.GEMINI_API_KEY) {
-//   console.log("❌ Missing GEMINI_API_KEY in .env");
+// if (!process.env.GROQ_API_KEY) {
+//   console.error("❌ Missing GROQ_API_KEY");
 //   process.exit(1);
 // }
 
 // if (!process.env.RAPID_API_KEY) {
-//   console.log("❌ Missing RAPID_API_KEY in .env");
+//   console.error("❌ Missing RAPID_API_KEY");
 //   process.exit(1);
 // }
 
-// /* ===============================
-//    🤖 GEMINI CONFIG
-// ================================ */
+// console.log("✅ All environment variables loaded");
 
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GEMINI_API_KEY
-// });
+// /* =================================================
+//    💾 MEMORY STORE
+// ================================================= */
 
-// /* ===============================
-//    🔁 SAFE AI GENERATION
-// ================================ */
+// let latestReport = null;
+
+// /* =================================================
+//    🤖 GROQ AI FUNCTION (Using Axios)
+// ================================================= */
 
 // async function safeGenerate(prompt) {
 //   try {
-//     const response = await ai.models.generateContent({
-//       model: "gemini-2.0-flash",
-//       contents: prompt
-//     });
-
-//     if (response?.text) return response.text;
-
-//     if (response?.candidates?.length > 0) {
-//       return response.candidates[0]?.content?.parts?.[0]?.text || "";
-//     }
-
-//     return "";
-//   } catch (err) {
-//     console.log("AI Error:", err.message);
-//     return "AI generation failed.";
-//   }
-// }
-
-// /* ============================================
-//    📊 1️⃣ MAIN STARTUP REPORT
-// ============================================ */
-
-// app.post("/analyze", async (req, res) => {
-//   try {
-//     const { ideaName, problem, audience, country, budget } = req.body;
-
-//     if (!ideaName || !problem || !audience || !country || !budget) {
-//       return res.json({ success: false });
-//     }
-
-//     global.latestInput = {
-//       ideaName,
-//       problem,
-//       audience,
-//       country,
-//       budget
-//     };
-
-//     const prompt = `
-// You are a venture capitalist.
-
-// Return ONLY raw valid JSON.
-
-// {
-//   "Executive Summary": "...",
-//   "Problem Validation": "...",
-//   "Market Opportunity": "...",
-//   "Target Audience Insights": "...",
-//   "Competitor Analysis": "...",
-//   "Unique Differentiation": "...",
-//   "Monetization Model": "...",
-//   "Go-To-Market Strategy": "...",
-//   "Financial Projection": "...",
-//   "Risk Assessment": "...",
-//   "AI Investment Score": "Numeric score with short explanation"
-// }
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
-
-//     const raw = await safeGenerate(prompt);
-
-//     let cleaned = raw.trim();
-
-//     if (cleaned.startsWith("```")) {
-//       cleaned = cleaned.replace(/```json/g, "")
-//                        .replace(/```/g, "")
-//                        .trim();
-//     }
-
-//     const first = cleaned.indexOf("{");
-//     const last = cleaned.lastIndexOf("}");
-
-//     if (first !== -1 && last !== -1) {
-//       cleaned = cleaned.substring(first, last + 1);
-//     }
-
-//     const report = JSON.parse(cleaned);
-//     global.latestReport = report;
-
-//     res.json({
-//       success: true,
-//       sections: Object.keys(report)
-//     });
-
-//   } catch (err) {
-//     console.log("Analyze Error:", err.message);
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🔍 2️⃣ SECTION DETAIL ROUTE
-// ============================================ */
-
-// app.get("/section/:name", async (req, res) => {
-//   try {
-//     const sectionName = req.params.name;
-
-//     if (!global.latestInput) {
-//       return res.json({ success: false });
-//     }
-
-//     const { ideaName, problem, audience, country, budget } =
-//       global.latestInput;
-
-//     const prompt = `
-// Generate a professional analysis (300–500 words)
-// for the section: "${sectionName}"
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
-
-//     const content = await safeGenerate(prompt);
-
-//     res.json({
-//       success: true,
-//       content
-//     });
-
-//   } catch (err) {
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🌍 3️⃣ MARKET COMPETITION ANALYSIS
-// ============================================ */
-
-// app.get("/api/market-analysis", async (req, res) => {
-//   try {
-//     const domain = req.query.domain;
-
-//     if (!domain) {
-//       return res.status(400).json({ message: "Domain is required" });
-//     }
-
-//     const response = await axios.get(
-//       "https://similarweb-insights.p.rapidapi.com/traffic",
+//     console.log("📨 Sending request to Groq API...");
+    
+//     const response = await axios.post(
+//       "https://api.groq.com/openai/v1/chat/completions",
 //       {
-//         params: { domain },
+//         model: "llama-3.3-70b-versatile",
+//         messages: [{ role: "user", content: prompt }],
+//         temperature: 0.7,
+//         max_tokens: 2048
+//       },
+//       {
 //         headers: {
-//           "x-rapidapi-key": process.env.RAPID_API_KEY,
-//           "x-rapidapi-host": "similarweb-insights.p.rapidapi.com"
-//         }
-//       }
-//     );
-
-//     const visits = response.data.Visits || 0;
-
-//     let competitionScore =
-//       visits > 10000000 ? 90 :
-//       visits > 1000000  ? 75 :
-//       visits > 100000   ? 50 : 25;
-
-//     const competitionLevel =
-//       competitionScore >= 90 ? "Very High" :
-//       competitionScore >= 75 ? "High" :
-//       competitionScore >= 50 ? "Medium" : "Low";
-
-//     const riskLevel =
-//       competitionScore > 80 ? "High Risk" :
-//       competitionScore > 60 ? "Moderate Risk" : "Low Risk";
-
-//     const startupHealthScore = Math.round(
-//       (80 * 0.4) + ((100 - competitionScore) * 0.6)
-//     );
-
-//     res.json({
-//       domain,
-//       visits,
-//       competitionLevel,
-//       competitionScore,
-//       riskLevel,
-//       startupHealthScore
-//     });
-
-//   } catch (error) {
-//     console.error("Market API Error:", error.response?.data || error.message);
-//     res.status(500).json({ message: "Market API Error" });
-//   }
-// });
-
-// /* ============================================
-//    📰 4️⃣ STARTUP NEWS SEARCH
-// ============================================ */
-
-// app.get("/api/startup-news", async (req, res) => {
-//   try {
-//     const query = req.query.q;
-
-//     if (!query) {
-//       return res.status(400).json({ message: "Search query required" });
-//     }
-
-//     const response = await axios.get(
-//       "https://real-time-news-data.p.rapidapi.com/search",
-//       {
-//         params: {
-//           query: query,
-//           limit: 10,
-//           time_published: "anytime",
-//           country: "US",
-//           lang: "en"
+//           "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+//           "Content-Type": "application/json"
 //         },
-//         headers: {
-//           "x-rapidapi-key": process.env.RAPID_API_KEY,
-//           "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
-//         }
+//         timeout: 30000
 //       }
 //     );
 
-//     res.json({
-//       success: true,
-//       results: response.data.data
-//     });
+//     console.log("✅ Groq response received");
+//     return response.data?.choices?.[0]?.message?.content || "";
 
-//   } catch (error) {
-//     console.error("News API Error:", error.response?.data || error.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch startup news"
-//     });
-//   }
-// });
-
-// /* ============================================
-//    🚀 START SERVER
-// ============================================ */
-
-// const PORT = process.env.PORT || 3000;
-
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`🚀 Startup Survival AI running on port ${PORT}`);
-// });
-
-
-
-
-
-
-
-
-
-// require("dotenv").config();
-
-// const express = require("express");
-// const cors = require("cors");
-// const rateLimit = require("express-rate-limit");
-// const helmet = require("helmet");
-// const axios = require("axios");
-// const { GoogleGenAI } = require("@google/genai");
-
-// const app = express();
-
-// /* ===============================
-//    🔐 SECURITY
-// ================================ */
-
-// app.use(helmet());
-// app.use(cors());
-// app.use(express.json());
-
-// const limiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 30
-// });
-// app.use(limiter);
-
-// /* ===============================
-//    🔑 ENV VALIDATION
-// ================================ */
-
-// if (!process.env.GEMINI_API_KEY) {
-//   console.log("❌ Missing GEMINI_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// if (!process.env.RAPID_API_KEY) {
-//   console.log("❌ Missing RAPID_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// /* ===============================
-//    🤖 GEMINI CONFIG
-// ================================ */
-
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GEMINI_API_KEY
-// });
-
-// /* ===============================
-//    🔁 SAFE AI GENERATION
-// ================================ */
-
-// async function safeGenerate(prompt) {
-//   try {
-//     const response = await ai.models.generateContent({
-//       model: "gemini-2.0-flash",
-//       contents: prompt
-//     });
-
-//     if (response?.text) return response.text;
-
-//     if (response?.candidates?.length > 0) {
-//       return response.candidates[0]?.content?.parts?.[0]?.text || "";
-//     }
-
-//     return "";
 //   } catch (err) {
-//     console.log("AI Error:", err.message);
-//     return "AI generation failed.";
+//     console.error("❌ Groq Error:", err.response?.data?.error?.message || err.message);
+//     return null;
 //   }
 // }
 
-// /* ============================================
-//    📊 1️⃣ MAIN STARTUP REPORT
-// ============================================ */
+// /* =================================================
+//    📊 1️⃣ GENERATE FULL STARTUP REPORT
+// ================================================= */
 
 // app.post("/analyze", async (req, res) => {
 //   try {
 //     const { ideaName, problem, audience, country, budget } = req.body;
 
 //     if (!ideaName || !problem || !audience || !country || !budget) {
-//       return res.json({ success: false });
+//       return res.status(400).json({
+//         success: false,
+//         message: "All fields required"
+//       });
 //     }
 
-//     global.latestInput = {
-//       ideaName,
-//       problem,
-//       audience,
-//       country,
-//       budget
-//     };
+//     console.log(`\n📊 Analyzing startup: ${ideaName}`);
 
-//     const prompt = `
-// You are a venture capitalist.
+//     const prompt = `You are a professional startup analyst. Generate a detailed startup investment report in valid JSON format ONLY.
 
-// Return ONLY raw valid JSON.
+// CRITICAL: Your response must be ONLY valid JSON, nothing else.
+
+// Return this exact JSON structure with detailed content (minimum 300 words per section):
 
 // {
-//   "Executive Summary": "...",
-//   "Problem Validation": "...",
-//   "Market Opportunity": "...",
-//   "Target Audience Insights": "...",
-//   "Competitor Analysis": "...",
-//   "Unique Differentiation": "...",
-//   "Monetization Model": "...",
-//   "Go-To-Market Strategy": "...",
-//   "Financial Projection": "...",
-//   "Risk Assessment": "...",
-//   "AI Investment Score": "Numeric score with short explanation"
+//   "Executive Summary": "Write a comprehensive executive summary here...",
+//   "Market Analysis": "Write detailed market analysis here...",
+//   "Revenue Model": "Write revenue model details here...",
+//   "Risk Assessment": "Write risk assessment here...",
+//   "Growth Strategy": "Write growth strategy here..."
 // }
 
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
+// STARTUP DETAILS:
+// - Name: ${ideaName}
+// - Problem: ${problem}
+// - Audience: ${audience}
+// - Country: ${country}
+// - Budget: $${budget}
+
+// Now generate the report as valid JSON only. Start with { and end with }. No markdown, no code blocks, no extra text.`;
 
 //     const raw = await safeGenerate(prompt);
 
-//     let cleaned = raw.trim();
-
-//     if (cleaned.startsWith("```")) {
-//       cleaned = cleaned.replace(/```json/g, "")
-//                        .replace(/```/g, "")
-//                        .trim();
+//     if (!raw) {
+//       return res.status(500).json({ 
+//         success: false,
+//         message: "Failed to generate report from Groq"
+//       });
 //     }
 
-//     const first = cleaned.indexOf("{");
-//     const last = cleaned.lastIndexOf("}");
-
-//     if (first !== -1 && last !== -1) {
-//       cleaned = cleaned.substring(first, last + 1);
-//     }
-
-//     const report = JSON.parse(cleaned);
-//     global.latestReport = report;
-
-//     res.json({
-//       success: true,
-//       sections: Object.keys(report)
-//     });
-
-//   } catch (err) {
-//     console.log("Analyze Error:", err.message);
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🔍 2️⃣ SECTION DETAIL ROUTE
-// ============================================ */
-
-// app.get("/section/:name", async (req, res) => {
-//   try {
-//     const sectionName = req.params.name;
-
-//     if (!global.latestInput) {
-//       return res.json({ success: false });
-//     }
-
-//     const { ideaName, problem, audience, country, budget } =
-//       global.latestInput;
-
-//     const prompt = `
-// Generate a professional analysis (300–500 words)
-// for the section: "${sectionName}"
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
-
-//     const content = await safeGenerate(prompt);
-
-//     res.json({
-//       success: true,
-//       content
-//     });
-
-//   } catch (err) {
-//     res.json({ success: false });
-//   }
-// });
-
-// /* ============================================
-//    🌍 3️⃣ MARKET COMPETITION ANALYSIS
-// ============================================ */
-
-// app.get("/api/market-analysis", async (req, res) => {
-//   try {
-//     const domain = req.query.domain;
-
-//     if (!domain) {
-//       return res.status(400).json({ message: "Domain is required" });
-//     }
-
-//     const response = await axios.get(
-//       "https://similarweb-insights.p.rapidapi.com/traffic",
-//       {
-//         params: { domain },
-//         headers: {
-//           "x-rapidapi-key": process.env.RAPID_API_KEY,
-//           "x-rapidapi-host": "similarweb-insights.p.rapidapi.com"
-//         }
-//       }
-//     );
-
-//     const visits = response.data.Visits || 0;
-
-//     let competitionScore =
-//       visits > 10000000 ? 90 :
-//       visits > 1000000  ? 75 :
-//       visits > 100000   ? 50 : 25;
-
-//     const competitionLevel =
-//       competitionScore >= 90 ? "Very High" :
-//       competitionScore >= 75 ? "High" :
-//       competitionScore >= 50 ? "Medium" : "Low";
-
-//     const riskLevel =
-//       competitionScore > 80 ? "High Risk" :
-//       competitionScore > 60 ? "Moderate Risk" : "Low Risk";
-
-//     const startupHealthScore = Math.round(
-//       (80 * 0.4) + ((100 - competitionScore) * 0.6)
-//     );
-
-//     res.json({
-//       domain,
-//       visits,
-//       competitionLevel,
-//       competitionScore,
-//       riskLevel,
-//       startupHealthScore
-//     });
-
-//   } catch (error) {
-//     console.error("Market API Error:", error.response?.data || error.message);
-//     res.status(500).json({ message: "Market API Error" });
-//   }
-// });
-
-// /* ============================================
-//    📰 4️⃣ STARTUP NEWS SEARCH (FIXED IMAGE)
-// ============================================ */
-
-// app.get("/api/startup-news", async (req, res) => {
-//   try {
-//     const query = req.query.q;
-
-//     if (!query) {
-//       return res.status(400).json({ message: "Search query required" });
-//     }
-
-//     const response = await axios.get(
-//       "https://real-time-news-data.p.rapidapi.com/search",
-//       {
-//         params: {
-//           query: query,
-//           limit: 10,
-//           time_published: "anytime",
-//           country: "US",
-//           lang: "en"
-//         },
-//         headers: {
-//           "x-rapidapi-key": process.env.RAPID_API_KEY,
-//           "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
-//         }
-//       }
-//     );
-
-//     const formattedNews = response.data.data.map(item => ({
-//       title: item.title,
-//       summary: item.snippet || item.summary || "",
-//       link: item.link,
-//       published_date: item.published_datetime_utc || "",
-//       image_url: item.photo_url || item.thumbnail || ""
-//     }));
-
-//     res.json({
-//       success: true,
-//       results: formattedNews
-//     });
-
-//   } catch (error) {
-//     console.error("News API Error:", error.response?.data || error.message);
-//     res.status(500).json({
-//       success: false,
-//       message: "Failed to fetch startup news"
-//     });
-//   }
-// });
-
-// /* ============================================
-//    🚀 START SERVER
-// ============================================ */
-
-// const PORT = process.env.PORT || 3000;
-
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`🚀 Startup Survival AI running on port ${PORT}`);
-// });
-
-
-
-
-
-
-
-
-
-
-
-// require("dotenv").config();
-
-// const express = require("express");
-// const cors = require("cors");
-// const rateLimit = require("express-rate-limit");
-// const helmet = require("helmet");
-// const axios = require("axios");
-// const { GoogleGenAI } = require("@google/genai");
-
-// const app = express();
-
-// /* ===============================
-//    🔐 SECURITY
-// ================================ */
-
-// app.use(helmet());
-// app.use(cors());
-// app.use(express.json());
-
-// const limiter = rateLimit({
-//   windowMs: 60 * 1000,
-//   max: 30
-// });
-// app.use(limiter);
-
-// /* ===============================
-//    🔑 ENV VALIDATION
-// ================================ */
-
-// if (!process.env.GEMINI_API_KEY) {
-//   console.log("❌ Missing GEMINI_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// if (!process.env.RAPID_API_KEY) {
-//   console.log("❌ Missing RAPID_API_KEY in .env");
-//   process.exit(1);
-// }
-
-// /* ===============================
-//    🤖 GEMINI CONFIG
-// ================================ */
-
-// const ai = new GoogleGenAI({
-//   apiKey: process.env.GEMINI_API_KEY
-// });
-
-// /* ===============================
-//    🔁 SAFE AI GENERATION
-// ================================ */
-
-// async function safeGenerate(prompt, retries = 3, delay = 2000) {
-//   try {
-//     const response = await ai.models.generateContent({
-//       model: "gemini-2.0-flash", // ✅ Correct model for @google/genai
-//       contents: prompt
-//     });
-
-//     if (response?.text) return response.text;
-
-//     if (response?.candidates?.length > 0) {
-//       return response.candidates[0]?.content?.parts?.[0]?.text || "";
-//     }
-
-//     return "";
-
-//   } catch (err) {
-
-//     console.log("AI Error:", err.message);
-
-//     // 🔥 Handle 429 with exponential backoff
-//     if (err.message.includes("429") && retries > 0) {
-//       console.log(`Retrying in ${delay / 1000}s...`);
-//       await new Promise(r => setTimeout(r, delay));
-//       return safeGenerate(prompt, retries - 1, delay * 2);
-//     }
-
-//     return "AI generation failed.";
-//   }
-// }
-
-// /* ============================================
-//    📊 1️⃣ MAIN STARTUP REPORT
-// ============================================ */
-
-// app.post("/analyze", async (req, res) => {
-//   try {
-//     const { ideaName, problem, audience, country, budget } = req.body;
-
-//     if (!ideaName || !problem || !audience || !country || !budget) {
-//       return res.json({ success: false, message: "Missing fields" });
-//     }
-
-//     global.latestInput = {
-//       ideaName,
-//       problem,
-//       audience,
-//       country,
-//       budget
-//     };
-
-//     const prompt = `
-// You are a venture capitalist.
-
-// Return ONLY raw valid JSON.
-// Keep output under 800 words.
-
-// {
-//   "Executive Summary": "...",
-//   "Problem Validation": "...",
-//   "Market Opportunity": "...",
-//   "Target Audience Insights": "...",
-//   "Competitor Analysis": "...",
-//   "Unique Differentiation": "...",
-//   "Monetization Model": "...",
-//   "Go-To-Market Strategy": "...",
-//   "Financial Projection": "...",
-//   "Risk Assessment": "...",
-//   "AI Investment Score": "Numeric score with short explanation"
-// }
-
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
-
-//     const raw = await safeGenerate(prompt);
-
-//     if (!raw || raw.includes("AI generation failed")) {
-//       return res.json({ success: false, message: "AI failed" });
-//     }
+//     /* ---------- Clean AI Response ---------- */
 
 //     let cleaned = raw.trim();
 
-//     if (cleaned.startsWith("```")) {
-//       cleaned = cleaned.replace(/```json/g, "")
-//                        .replace(/```/g, "")
-//                        .trim();
+//     // Remove markdown code blocks
+//     if (cleaned.includes("```")) {
+//       cleaned = cleaned.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
 //     }
 
+//     // Find JSON object
 //     const first = cleaned.indexOf("{");
 //     const last = cleaned.lastIndexOf("}");
 
-//     if (first !== -1 && last !== -1) {
-//       cleaned = cleaned.substring(first, last + 1);
+//     console.log(`Raw response length: ${raw.length}, Cleaned length: ${cleaned.length}`);
+
+//     if (first === -1 || last === -1) {
+//       console.error("❌ No valid JSON brackets found in response");
+//       console.error("Raw response sample:", raw.substring(0, 200));
+//       return res.status(500).json({
+//         success: false,
+//         message: "Invalid response format from AI"
+//       });
 //     }
 
-//     let report;
+//     const jsonString = cleaned.substring(first, last + 1);
+    
+//     let parsed;
 
 //     try {
-//       report = JSON.parse(cleaned);
-//     } catch (parseErr) {
-//       console.log("JSON Parse Error:", parseErr.message);
-//       return res.json({ success: false, message: "Invalid AI JSON format" });
+//       parsed = JSON.parse(jsonString);
+      
+//       // Validate all required keys exist
+//       const requiredKeys = ["Executive Summary", "Market Analysis", "Revenue Model", "Risk Assessment", "Growth Strategy"];
+//       const missingKeys = requiredKeys.filter(key => !parsed[key]);
+      
+//       if (missingKeys.length > 0) {
+//         console.error("❌ Missing required sections:", missingKeys);
+//         return res.status(500).json({
+//           success: false,
+//           message: "Incomplete report sections",
+//           missing: missingKeys
+//         });
+//       }
+      
+//     } catch (err) {
+//       console.error("❌ JSON parse error:", err.message);
+//       console.error("Attempted to parse:", jsonString.substring(0, 300));
+//       return res.status(500).json({
+//         success: false,
+//         message: "Failed to parse response"
+//       });
 //     }
 
-//     global.latestReport = report;
+//     latestReport = parsed;
+
+//     console.log("✅ Report generated and stored successfully");
 
 //     res.json({
 //       success: true,
-//       sections: Object.keys(report)
+//       message: "Analysis completed",
+//       sections: Object.keys(parsed),
+//       startupName: ideaName,
+//       generatedAt: new Date().toISOString()
 //     });
 
 //   } catch (err) {
-//     console.log("Analyze Error:", err.message);
-//     res.json({ success: false });
+//     console.error("❌ Analyze Error:", err.message);
+//     res.status(500).json({ 
+//       success: false,
+//       message: "Failed to analyze startup"
+//     });
 //   }
 // });
 
-// /* ============================================
-//    🔍 2️⃣ SECTION DETAIL ROUTE
-// ============================================ */
+// /* =================================================
+//    🔍 2️⃣ GET SECTION (SMART MATCH)
+// ================================================= */
 
-// app.get("/section/:name", async (req, res) => {
+// app.get("/section/:name", (req, res) => {
 //   try {
-//     const sectionName = req.params.name;
-
-//     if (!global.latestInput) {
-//       return res.json({ success: false });
+//     if (!latestReport) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Run /analyze first"
+//       });
 //     }
 
-//     const { ideaName, problem, audience, country, budget } =
-//       global.latestInput;
+//     const requestName = req.params.name
+//       .toLowerCase()
+//       .replace(/\s+/g, "")
+//       .replace(/[^a-z0-9]/g, "");
 
-//     const prompt = `
-// Generate a professional analysis (300–500 words)
-// for the section: "${sectionName}"
+//     const matchedKey = Object.keys(latestReport).find(key =>
+//       key.toLowerCase()
+//         .replace(/\s+/g, "")
+//         .replace(/[^a-z0-9]/g, "") === requestName
+//     );
 
-// Startup Idea: ${ideaName}
-// Problem: ${problem}
-// Target Audience: ${audience}
-// Country: ${country}
-// Budget: ${budget}
-// `;
+//     if (!matchedKey) {
+//       return res.status(404).json({
+//         success: false,
+//         message: `Section '${req.params.name}' not found`,
+//         availableSections: Object.keys(latestReport)
+//       });
+//     }
 
-//     const content = await safeGenerate(prompt);
+//     const content = latestReport[matchedKey];
+
+//     console.log(`📖 Retrieved section: ${matchedKey}`);
 
 //     res.json({
 //       success: true,
-//       content
+//       section: matchedKey,
+//       content,
+//       length: content.length,
+//       wordCount: content.split(/\s+/).length
 //     });
 
 //   } catch (err) {
-//     res.json({ success: false });
+//     console.error("❌ Section Error:", err.message);
+//     res.status(500).json({ 
+//       success: false,
+//       message: "Failed to retrieve section"
+//     });
 //   }
 // });
 
-// /* ============================================
-//    🌍 3️⃣ MARKET COMPETITION ANALYSIS
-// ============================================ */
+// /* =================================================
+//    🌍 3️⃣ MARKET ANALYSIS (RAPIDAPI)
+// ================================================= */
 
 // app.get("/api/market-analysis", async (req, res) => {
 //   try {
-//     const domain = req.query.domain;
+//     const { domain } = req.query;
 
 //     if (!domain) {
-//       return res.status(400).json({ message: "Domain is required" });
+//       return res.status(400).json({ 
+//         success: false,
+//         message: "Domain parameter required (e.g., ?domain=example.com)" 
+//       });
 //     }
+
+//     console.log(`📊 Fetching market analysis for: ${domain}`);
 
 //     const response = await axios.get(
 //       "https://similarweb-insights.p.rapidapi.com/traffic",
@@ -1461,66 +297,182 @@
 //         headers: {
 //           "x-rapidapi-key": process.env.RAPID_API_KEY,
 //           "x-rapidapi-host": "similarweb-insights.p.rapidapi.com"
-//         }
+//         },
+//         timeout: 10000
 //       }
 //     );
 
-//     const visits = response.data.Visits || 0;
+//     const visits = response.data?.Visits || 0;
 
-//     let competitionScore =
+//     const competitionScore =
 //       visits > 10000000 ? 90 :
-//       visits > 1000000  ? 75 :
-//       visits > 100000   ? 50 : 25;
+//         visits > 1000000 ? 75 :
+//           visits > 100000 ? 50 : 
+//             visits > 10000 ? 25 : 10;
 
-//     const competitionLevel =
-//       competitionScore >= 90 ? "Very High" :
-//       competitionScore >= 75 ? "High" :
-//       competitionScore >= 50 ? "Medium" : "Low";
-
-//     const riskLevel =
-//       competitionScore > 80 ? "High Risk" :
-//       competitionScore > 60 ? "Moderate Risk" : "Low Risk";
-
-//     const startupHealthScore = Math.round(
-//       (80 * 0.4) + ((100 - competitionScore) * 0.6)
-//     );
+//     console.log(`✅ Market analysis retrieved: ${visits.toLocaleString()} visits`);
 
 //     res.json({
+//       success: true,
 //       domain,
-//       visits,
-//       competitionLevel,
+//       visits: visits.toLocaleString(),
 //       competitionScore,
-//       riskLevel,
-//       startupHealthScore
+//       competitionLevel: competitionScore >= 80 ? "Very High" : competitionScore >= 60 ? "High" : "Medium"
 //     });
 
-//   } catch (error) {
-//     console.error("Market API Error:", error.response?.data || error.message);
-//     res.status(500).json({ message: "Market API Error" });
+//   } catch (err) {
+//     console.error("❌ Market API Error:", err.message);
+//     res.status(500).json({ 
+//       success: false,
+//       message: "Market API Error" 
+//     });
 //   }
 // });
 
-// /* ============================================
-//    📰 4️⃣ STARTUP NEWS SEARCH
-// ============================================ */
+// /* =================================================
+//    📰 4️⃣ STARTUP NEWS
+// ================================================= */
+
+// // app.get("/api/startup-news", async (req, res) => {
+// //   try {
+// //     const { q } = req.query;
+
+// //     if (!q) {
+// //       return res.status(400).json({ 
+// //         success: false,
+// //         message: "Query parameter 'q' required (e.g., ?q=ai+startups)" 
+// //       });
+// //     }
+
+// //     console.log(`📰 Searching news for: ${q}`);
+
+// //     const response = await axios.get(
+// //       "https://real-time-news-data.p.rapidapi.com/search",
+// //       {
+// //         params: { query: q, limit: 10 },
+// //         headers: {
+// //           "x-rapidapi-key": process.env.RAPID_API_KEY,
+// //           "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
+// //         },
+// //         timeout: 10000
+// //       }
+// //     );
+
+// //     const articles = response.data?.data || [];
+
+// //     console.log(`✅ Retrieved ${articles.length} news articles`);
+
+// //     res.json({
+// //       success: true,
+// //       query: q,
+// //       count: articles.length,
+// //       results: articles.map(article => ({
+// //         title: article.title,
+// //         link: article.link,
+// //         source: article.source_id,
+// //         publishedAt: article.published_datetime_utc,
+// //         summary: article.description || "No summary available"
+// //       }))
+// //     });
+
+// //   } catch (err) {
+// //     console.error("❌ News API Error:", err.message);
+// //     res.status(500).json({
+// //       success: false,
+// //       message: "News API Error"
+// //     });
+// //   }
+// // });
+
+
+
+// /* =================================================
+//    📰 STARTUP NEWS API
+// ================================================= */
 
 // app.get("/api/startup-news", async (req, res) => {
 //   try {
-//     const query = req.query.q;
 
-//     if (!query) {
-//       return res.status(400).json({ message: "Search query required" });
+//     const { q } = req.query;
+
+//     if (!q) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Query parameter 'q' required (example: ?q=ai startups)"
+//       });
 //     }
+
+//     console.log(`📰 Searching news for: ${q}`);
 
 //     const response = await axios.get(
 //       "https://real-time-news-data.p.rapidapi.com/search",
 //       {
 //         params: {
-//           query,
-//           limit: 10,
-//           time_published: "anytime",
-//           country: "US",
-//           lang: "en"
+//           query: q,
+//           limit: 10
+//         },
+//         headers: {
+//           "x-rapidapi-key": process.env.RAPID_API_KEY,
+//           "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
+//         },
+//         timeout: 10000
+//       }
+//     );
+
+//     const articles = response.data?.data || [];
+
+//     console.log(`✅ Retrieved ${articles.length} news articles`);
+
+//     res.json({
+//       success: true,
+//       query: q,
+//       count: articles.length,
+
+//       results: articles.map(article => ({
+//         title: article.title,
+//         link: article.link,
+//         source: article.source_id,
+//         published_date: article.published_datetime_utc,
+//         summary: article.description || "No summary available",
+
+//         // ⭐ IMPORTANT FOR IMAGES
+//         image_url: article.photo_url || article.thumbnail_url || null
+//       }))
+
+//     });
+
+//   } catch (err) {
+
+//     console.error("❌ News API Error:", err.message);
+
+//     res.status(500).json({
+//       success: false,
+//       message: "News API Error"
+//     });
+
+//   }
+// });
+// app.get("/api/startup-competitors", async (req, res) => {
+
+//   try {
+
+//     const { q } = req.query;
+
+//     if (!q) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Query required (example: ?q=ai startup)"
+//       });
+//     }
+
+//     console.log("🔎 Searching competitors for:", q);
+
+//     const response = await axios.get(
+//       "https://real-time-news-data.p.rapidapi.com/search",
+//       {
+//         params: {
+//           query: `${q} startup`,
+//           limit: 10
 //         },
 //         headers: {
 //           "x-rapidapi-key": process.env.RAPID_API_KEY,
@@ -1529,38 +481,229 @@
 //       }
 //     );
 
-//     const formattedNews = response.data.data.map(item => ({
-//       title: item.title,
-//       summary: item.snippet || item.summary || "",
-//       link: item.link,
-//       published_date: item.published_datetime_utc || "",
-//       image_url: item.photo_url || item.thumbnail || ""
-//     }));
+//     const articles = response.data?.data || [];
+
+//     const competitors = articles.map(article => {
+
+//       let company = "Startup";
+
+//       if (article.title) {
+
+//         const words = article.title.split(" ");
+
+//         company = words.slice(0,2).join(" ");
+
+//       }
+
+//       return {
+//         company: company,
+//         website: article.link,
+//         summary: article.description || "No description available",
+//         image: article.photo_url || null,
+//         source: article.source_id,
+//         published: article.published_datetime_utc
+//       };
+
+//     });
+
 
 //     res.json({
 //       success: true,
-//       results: formattedNews
+//       idea: q,
+//       competitors: competitors
 //     });
 
 //   } catch (error) {
-//     console.error("News API Error:", error.response?.data || error.message);
+
+//     console.error("❌ API Error:", error.message);
+
 //     res.status(500).json({
 //       success: false,
-//       message: "Failed to fetch startup news"
+//       message: "Failed to fetch competitors"
 //     });
+
 //   }
+
 // });
 
-// /* ============================================
+
+
+// /* =================================================
+//    🧠 AI PROBLEM DETECTOR
+// ================================================= */
+
+// app.post("/api/problem-detector", async (req, res) => {
+
+//   try {
+
+//     const { ideaName, problem, audience } = req.body;
+
+//     if (!ideaName || !problem || !audience) {
+//       return res.status(400).json({
+//         success:false,
+//         message:"ideaName, problem, audience required"
+//       });
+//     }
+
+//     console.log("🧠 Running AI Problem Detector for:", ideaName);
+
+//     const prompt = `
+// You are a startup validation expert.
+
+// Analyze the startup problem and determine if it is a REAL and STRONG problem.
+
+// Return ONLY valid JSON.
+
+// JSON format:
+
+// {
+//  "isRealProblem": true,
+//  "affectedUsers": "who suffers from this problem",
+//  "painLevel": "Low | Medium | High",
+//  "frequency": "How often this problem occurs",
+//  "urgency": "Low | Medium | High",
+//  "validationScore": 0-100,
+//  "analysis": "Detailed explanation of why this is or isn't a strong startup problem"
+// }
+
+// Startup Idea: ${ideaName}
+
+// Problem:
+// ${problem}
+
+// Target Audience:
+// ${audience}
+
+// Respond ONLY with JSON.
+// `;
+
+//     const raw = await safeGenerate(prompt);
+
+//     if (!raw) {
+//       return res.status(500).json({
+//         success:false,
+//         message:"Groq AI failed"
+//       });
+//     }
+
+//     /* ---------- Clean AI Response ---------- */
+
+//     let cleaned = raw.trim();
+
+//     if (cleaned.includes("```")) {
+//       cleaned = cleaned.replace(/```json\n?/g,"").replace(/```\n?/g,"").trim();
+//     }
+
+//     const first = cleaned.indexOf("{");
+//     const last = cleaned.lastIndexOf("}");
+
+//     if (first === -1 || last === -1) {
+//       return res.status(500).json({
+//         success:false,
+//         message:"Invalid AI response format"
+//       });
+//     }
+
+//     const jsonString = cleaned.substring(first,last+1);
+
+//     let parsed;
+
+//     try {
+//       parsed = JSON.parse(jsonString);
+//     } catch(err) {
+//       return res.status(500).json({
+//         success:false,
+//         message:"Failed to parse AI response"
+//       });
+//     }
+
+//     console.log("✅ Problem Detector completed");
+
+//     res.json({
+//       success:true,
+//       startup:ideaName,
+//       result:parsed
+//     });
+
+//   } catch(err) {
+
+//     console.error("❌ Problem Detector Error:",err.message);
+
+//     res.status(500).json({
+//       success:false,
+//       message:"Problem detection failed"
+//     });
+
+//   }
+
+// });
+
+
+// /* =================================================
+//    🔧 ERROR HANDLING
+// ================================================= */
+
+// app.use((req, res) => {
+//   res.status(404).json({
+//     success: false,
+//     message: "Endpoint not found",
+//     path: req.path,
+//     method: req.method
+//   });
+// });
+
+// app.use((err, req, res, next) => {
+//   console.error("❌ Unhandled Error:", err.message);
+//   res.status(500).json({
+//     success: false,
+//     message: "Internal server error"
+//   });
+// });
+
+// /* =================================================
 //    🚀 START SERVER
-// ============================================ */
+// ================================================= */
 
 // const PORT = process.env.PORT || 3000;
 
-// app.listen(PORT, "0.0.0.0", () => {
-//   console.log(`🚀 Startup Survival AI running on port ${PORT}`);
+// const server = app.listen(PORT, () => {
+//   console.log(`
+// ╔═══════════════════════════════════════════════════╗
+// ║                                                   ║
+// ║     🚀 STARTUP SURVIVAL AI SERVER RUNNING        ║
+// ║                                                   ║
+// ║  Port: ${PORT}                                         ║
+// ║  AI Model: Groq (Llama 3.3 70B Versatile)       ║
+// ║  APIs: RapidAPI (News & Market Analysis)        ║
+// ║                                                   ║
+// ║  🔗 Server: http://localhost:${PORT}                   ║
+// ║  📊 Health: http://localhost:${PORT}/health             ║
+// ║  📚 API Info: http://localhost:${PORT}/                 ║
+// ║                                                   ║
+// ║  ✅ Ready to analyze startups!                   ║
+// ║                                                   ║
+// ╚═══════════════════════════════════════════════════╝
+//   `);
 // });
 
+// /* Graceful shutdown */
+// process.on("SIGTERM", () => {
+//   console.log("📍 SIGTERM received, shutting down gracefully");
+//   server.close(() => {
+//     console.log("✅ Server closed");
+//     process.exit(0);
+//   });
+// });
+
+// process.on("SIGINT", () => {
+//   console.log("📍 SIGINT received, shutting down gracefully");
+//   server.close(() => {
+//     console.log("✅ Server closed");
+//     process.exit(0);
+//   });
+// });
+
+// module.exports = app;
 
 
 
@@ -1568,88 +711,101 @@
 
 
 
-// Load dotenv only in development
-if (process.env.NODE_ENV !== "production") {
-  require("dotenv").config();
-}
+
+
+
+
+
+
+
+require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
 const helmet = require("helmet");
 const axios = require("axios");
-
+const https = require("https");
+const googleTrends = require('google-trends-api');
 const app = express();
 
-/* ============================================
-   SECURITY & MIDDLEWARE
-============================================ */
+/* =================================================
+   🔐 SECURITY
+================================================= */
 
 app.use(helmet());
 app.use(cors());
-app.use(express.json());
-app.set("trust proxy", 1);   // IMPORTANT for Vercel
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(
   rateLimit({
     windowMs: 60 * 1000,
-    max: 30,
-    standardHeaders: true,
-    legacyHeaders: false
+    max: 100,
+    message: { success: false, message: "Too many requests" }
   })
 );
 
-/* ============================================
-   HEALTH CHECK
-============================================ */
+/* =================================================
+   🔑 ENV CHECK
+================================================= */
 
-app.get("/", (req, res) => {
-  res.json({
-    status: "OK",
-    message: "Startup Survival AI Running 🚀"
-  });
-});
+if (!process.env.GROQ_API_KEY) {
+  console.error("❌ Missing GROQ_API_KEY");
+  process.exit(1);
+}
 
-/* ============================================
-   SAFE GEMINI FUNCTION (DIRECT API CALL)
-============================================ */
+if (!process.env.RAPID_API_KEY) {
+  console.error("❌ Missing RAPID_API_KEY");
+  process.exit(1);
+}
 
-async function safeGenerate(prompt, retries = 3, delay = 2000) {
+console.log("✅ All environment variables loaded");
+
+/* =================================================
+   💾 MEMORY STORE
+================================================= */
+
+let latestReport = null;
+let latestPitch = null;
+
+/* =================================================
+   🤖 GROQ AI FUNCTION (Using Axios)
+================================================= */
+
+async function safeGenerate(prompt) {
   try {
-    if (!process.env.GEMINI_API_KEY) {
-      return "Gemini API key missing.";
-    }
-
+    console.log("📨 Sending request to Groq API...");
+    
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      "https://api.groq.com/openai/v1/chat/completions",
       {
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        max_tokens: 2048
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        timeout: 60000
       }
     );
 
-    return (
-      response.data?.candidates?.[0]?.content?.parts?.[0]?.text || ""
-    );
+    console.log("✅ Groq response received");
+    return response.data?.choices?.[0]?.message?.content || "";
 
   } catch (err) {
-    console.error("Gemini Error:", err.response?.data || err.message);
-
-    if (err.response?.status === 429 && retries > 0) {
-      await new Promise(r => setTimeout(r, delay));
-      return safeGenerate(prompt, retries - 1, delay * 2);
-    }
-
-    return "AI generation failed.";
+    console.error("❌ Groq Error:", err.response?.data?.error?.message || err.message);
+    return null;
   }
 }
 
-/* ============================================
-   STARTUP ANALYSIS
-============================================ */
+/* =================================================
+   📊 1️⃣ GENERATE FULL STARTUP REPORT
+================================================= */
 
 app.post("/analyze", async (req, res) => {
   try {
@@ -1658,55 +814,187 @@ app.post("/analyze", async (req, res) => {
     if (!ideaName || !problem || !audience || !country || !budget) {
       return res.status(400).json({
         success: false,
-        message: "Missing required fields"
+        message: "All fields required"
       });
     }
 
-    const prompt = `
-Analyze this startup idea professionally:
+    console.log(`\n📊 Analyzing startup: ${ideaName}`);
 
-Startup Idea: ${ideaName}
-Problem: ${problem}
-Target Audience: ${audience}
-Country: ${country}
-Budget: ${budget}
+    const prompt = `You are a professional startup analyst. Generate a detailed startup investment report in valid JSON format ONLY.
 
-Provide:
-- Executive summary
-- Market opportunity
-- Competitor overview
-- Monetization strategy
-- Risk assessment
-- Investment recommendation
-`;
+CRITICAL: Your response must be ONLY valid JSON, nothing else.
 
-    const result = await safeGenerate(prompt);
+Return this exact JSON structure with detailed content (minimum 300 words per section):
+
+{
+  "Executive Summary": "Write a comprehensive executive summary here...",
+  "Market Analysis": "Write detailed market analysis here...",
+  "Revenue Model": "Write revenue model details here...",
+  "Risk Assessment": "Write risk assessment here...",
+  "Growth Strategy": "Write growth strategy here..."
+}
+
+STARTUP DETAILS:
+- Name: ${ideaName}
+- Problem: ${problem}
+- Audience: ${audience}
+- Country: ${country}
+- Budget: $${budget}
+
+Now generate the report as valid JSON only. Start with { and end with }. No markdown, no code blocks, no extra text.`;
+
+    const raw = await safeGenerate(prompt);
+
+    if (!raw) {
+      return res.status(500).json({ 
+        success: false,
+        message: "Failed to generate report from Groq"
+      });
+    }
+
+    /* ---------- Clean AI Response ---------- */
+
+    let cleaned = raw.trim();
+
+    // Remove markdown code blocks
+    if (cleaned.includes("```")) {
+      cleaned = cleaned.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    }
+
+    // Find JSON object
+    const first = cleaned.indexOf("{");
+    const last = cleaned.lastIndexOf("}");
+
+    console.log(`Raw response length: ${raw.length}, Cleaned length: ${cleaned.length}`);
+
+    if (first === -1 || last === -1) {
+      console.error("❌ No valid JSON brackets found in response");
+      console.error("Raw response sample:", raw.substring(0, 200));
+      return res.status(500).json({
+        success: false,
+        message: "Invalid response format from AI"
+      });
+    }
+
+    const jsonString = cleaned.substring(first, last + 1);
+    
+    let parsed;
+
+    try {
+      parsed = JSON.parse(jsonString);
+      
+      // Validate all required keys exist
+      const requiredKeys = ["Executive Summary", "Market Analysis", "Revenue Model", "Risk Assessment", "Growth Strategy"];
+      const missingKeys = requiredKeys.filter(key => !parsed[key]);
+      
+      if (missingKeys.length > 0) {
+        console.error("❌ Missing required sections:", missingKeys);
+        return res.status(500).json({
+          success: false,
+          message: "Incomplete report sections",
+          missing: missingKeys
+        });
+      }
+      
+    } catch (err) {
+      console.error("❌ JSON parse error:", err.message);
+      console.error("Attempted to parse:", jsonString.substring(0, 300));
+      return res.status(500).json({
+        success: false,
+        message: "Failed to parse response"
+      });
+    }
+
+    latestReport = parsed;
+
+    console.log("✅ Report generated and stored successfully");
 
     res.json({
       success: true,
-      result
+      message: "Analysis completed",
+      sections: Object.keys(parsed),
+      startupName: ideaName,
+      generatedAt: new Date().toISOString()
     });
 
   } catch (err) {
-    console.error("Analyze Error:", err.message);
-    res.status(500).json({ success: false });
+    console.error("❌ Analyze Error:", err.message);
+    res.status(500).json({ 
+      success: false,
+      message: "Failed to analyze startup"
+    });
   }
 });
 
-/* ============================================
-   MARKET ANALYSIS
-============================================ */
+/* =================================================
+   🔍 2️⃣ GET SECTION (SMART MATCH)
+================================================= */
+
+app.get("/section/:name", (req, res) => {
+  try {
+    if (!latestReport) {
+      return res.status(400).json({
+        success: false,
+        message: "Run /analyze first"
+      });
+    }
+
+    const requestName = req.params.name
+      .toLowerCase()
+      .replace(/\s+/g, "")
+      .replace(/[^a-z0-9]/g, "");
+
+    const matchedKey = Object.keys(latestReport).find(key =>
+      key.toLowerCase()
+        .replace(/\s+/g, "")
+        .replace(/[^a-z0-9]/g, "") === requestName
+    );
+
+    if (!matchedKey) {
+      return res.status(404).json({
+        success: false,
+        message: `Section '${req.params.name}' not found`,
+        availableSections: Object.keys(latestReport)
+      });
+    }
+
+    const content = latestReport[matchedKey];
+
+    console.log(`📖 Retrieved section: ${matchedKey}`);
+
+    res.json({
+      success: true,
+      section: matchedKey,
+      content,
+      length: content.length,
+      wordCount: content.split(/\s+/).length
+    });
+
+  } catch (err) {
+    console.error("❌ Section Error:", err.message);
+    res.status(500).json({ 
+      success: false,
+      message: "Failed to retrieve section"
+    });
+  }
+});
+
+/* =================================================
+   🌍 3️⃣ MARKET ANALYSIS (RAPIDAPI)
+================================================= */
 
 app.get("/api/market-analysis", async (req, res) => {
   try {
     const { domain } = req.query;
 
     if (!domain) {
-      return res.status(400).json({
+      return res.status(400).json({ 
         success: false,
-        message: "Domain required"
+        message: "Domain parameter required (e.g., ?domain=example.com)" 
       });
     }
+
+    console.log(`📊 Fetching market analysis for: ${domain}`);
 
     const response = await axios.get(
       "https://similarweb-insights.p.rapidapi.com/traffic",
@@ -1714,74 +1002,658 @@ app.get("/api/market-analysis", async (req, res) => {
         params: { domain },
         headers: {
           "x-rapidapi-key": process.env.RAPID_API_KEY,
-          "x-rapidapi-host":
-            "similarweb-insights.p.rapidapi.com"
-        }
+          "x-rapidapi-host": "similarweb-insights.p.rapidapi.com"
+        },
+        timeout: 10000
       }
     );
 
+    const visits = response.data?.Visits || 0;
+
+    const competitionScore =
+      visits > 10000000 ? 90 :
+        visits > 1000000 ? 75 :
+          visits > 100000 ? 50 : 
+            visits > 10000 ? 25 : 10;
+
+    console.log(`✅ Market analysis retrieved: ${visits.toLocaleString()} visits`);
+
     res.json({
       success: true,
-      data: response.data
+      domain,
+      visits: visits.toLocaleString(),
+      competitionScore,
+      competitionLevel: competitionScore >= 80 ? "Very High" : competitionScore >= 60 ? "High" : "Medium"
     });
 
-  } catch (error) {
-    console.error("Market API Error:", error.message);
-    res.status(500).json({
+  } catch (err) {
+    console.error("❌ Market API Error:", err.message);
+    res.status(500).json({ 
       success: false,
-      message: "Market API Error"
+      message: "Market API Error" 
     });
   }
 });
 
-/* ============================================
-   STARTUP NEWS
-============================================ */
+/* =================================================
+   📰 4️⃣ STARTUP NEWS
+================================================= */
 
 app.get("/api/startup-news", async (req, res) => {
   try {
+
     const { q } = req.query;
 
     if (!q) {
       return res.status(400).json({
         success: false,
-        message: "Query required"
+        message: "Query parameter 'q' required (example: ?q=ai startups)"
       });
     }
+
+    console.log(`📰 Searching news for: ${q}`);
 
     const response = await axios.get(
       "https://real-time-news-data.p.rapidapi.com/search",
       {
         params: {
           query: q,
-          limit: 10,
-          country: "US",
-          lang: "en"
+          limit: 10
         },
         headers: {
           "x-rapidapi-key": process.env.RAPID_API_KEY,
-          "x-rapidapi-host":
-            "real-time-news-data.p.rapidapi.com"
-        }
+          "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
+        },
+        timeout: 10000
       }
     );
 
+    const articles = response.data?.data || [];
+
+    console.log(`✅ Retrieved ${articles.length} news articles`);
+
     res.json({
       success: true,
-      results: response.data?.data || []
+      query: q,
+      count: articles.length,
+
+      results: articles.map(article => ({
+        title: article.title,
+        link: article.link,
+        source: article.source_id,
+        published_date: article.published_datetime_utc,
+        summary: article.description || "No summary available",
+
+        // ⭐ IMPORTANT FOR IMAGES
+        image_url: article.photo_url || article.thumbnail_url || null
+      }))
+
     });
 
-  } catch (error) {
-    console.error("News API Error:", error.message);
+  } catch (err) {
+
+    console.error("❌ News API Error:", err.message);
+
     res.status(500).json({
       success: false,
       message: "News API Error"
     });
+
   }
 });
 
-/* ============================================
-   EXPORT FOR VERCEL
-============================================ */
+/* =================================================
+   🏆 5️⃣ STARTUP COMPETITORS
+================================================= */
+
+app.get("/api/startup-competitors", async (req, res) => {
+
+  try {
+
+    const { q } = req.query;
+
+    if (!q) {
+      return res.status(400).json({
+        success: false,
+        message: "Query required (example: ?q=ai startup)"
+      });
+    }
+
+    console.log("🔎 Searching competitors for:", q);
+
+    const response = await axios.get(
+      "https://real-time-news-data.p.rapidapi.com/search",
+      {
+        params: {
+          query: `${q} startup`,
+          limit: 10
+        },
+        headers: {
+          "x-rapidapi-key": process.env.RAPID_API_KEY,
+          "x-rapidapi-host": "real-time-news-data.p.rapidapi.com"
+        }
+      }
+    );
+
+    const articles = response.data?.data || [];
+
+    const competitors = articles.map(article => {
+
+      let company = "Startup";
+
+      if (article.title) {
+
+        const words = article.title.split(" ");
+
+        company = words.slice(0,2).join(" ");
+
+      }
+
+      return {
+        company: company,
+        website: article.link,
+        summary: article.description || "No description available",
+        image: article.photo_url || null,
+        source: article.source_id,
+        published: article.published_datetime_utc
+      };
+
+    });
+
+
+    res.json({
+      success: true,
+      idea: q,
+      competitors: competitors
+    });
+
+  } catch (error) {
+
+    console.error("❌ API Error:", error.message);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch competitors"
+    });
+
+  }
+
+});
+
+/* =================================================
+   🧠 6️⃣ AI PROBLEM DETECTOR
+================================================= */
+
+app.post("/api/problem-detector", async (req, res) => {
+
+  try {
+
+    const { ideaName, problem, audience } = req.body;
+
+    if (!ideaName || !problem || !audience) {
+      return res.status(400).json({
+        success:false,
+        message:"ideaName, problem, audience required"
+      });
+    }
+
+    console.log("🧠 Running AI Problem Detector for:", ideaName);
+
+    const prompt = `
+You are a startup validation expert.
+
+Analyze the startup problem and determine if it is a REAL and STRONG problem.
+
+Return ONLY valid JSON.
+
+JSON format:
+
+{
+ "isRealProblem": true,
+ "affectedUsers": "who suffers from this problem",
+ "painLevel": "Low | Medium | High",
+ "frequency": "How often this problem occurs",
+ "urgency": "Low | Medium | High",
+ "validationScore": 0-100,
+ "analysis": "Detailed explanation of why this is or isn't a strong startup problem"
+}
+
+Startup Idea: ${ideaName}
+
+Problem:
+${problem}
+
+Target Audience:
+${audience}
+
+Respond ONLY with JSON.
+`;
+
+    const raw = await safeGenerate(prompt);
+
+    if (!raw) {
+      return res.status(500).json({
+        success:false,
+        message:"Groq AI failed"
+      });
+    }
+
+    /* ---------- Clean AI Response ---------- */
+
+    let cleaned = raw.trim();
+
+    if (cleaned.includes("```")) {
+      cleaned = cleaned.replace(/```json\n?/g,"").replace(/```\n?/g,"").trim();
+    }
+
+    const first = cleaned.indexOf("{");
+    const last = cleaned.lastIndexOf("}");
+
+    if (first === -1 || last === -1) {
+      return res.status(500).json({
+        success:false,
+        message:"Invalid AI response format"
+      });
+    }
+
+    const jsonString = cleaned.substring(first,last+1);
+
+    let parsed;
+
+    try {
+      parsed = JSON.parse(jsonString);
+    } catch(err) {
+      return res.status(500).json({
+        success:false,
+        message:"Failed to parse AI response"
+      });
+    }
+
+    console.log("✅ Problem Detector completed");
+
+    res.json({
+      success:true,
+      startup:ideaName,
+      result:parsed
+    });
+
+  } catch(err) {
+
+    console.error("❌ Problem Detector Error:",err.message);
+
+    res.status(500).json({
+      success:false,
+      message:"Problem detection failed"
+    });
+
+  }
+
+});
+
+/* =================================================
+   🎤 7️⃣ AI PITCH GENERATOR
+================================================= */
+
+app.post("/api/pitch-generator", async (req, res) => {
+  try {
+    const { ideaName, problem, solution, audience, uniqueValue } = req.body;
+
+    console.log("\n🎤 ====== PITCH GENERATOR REQUEST ======");
+    console.log("📨 Received request:", {
+      ideaName,
+      problem: problem?.substring(0, 50) + "...",
+      solution: solution?.substring(0, 50) + "...",
+      audience,
+      uniqueValue
+    });
+
+    if (!ideaName || !problem || !solution || !audience) {
+      console.log("❌ Missing required fields");
+      return res.status(400).json({
+        success: false,
+        message: "ideaName, problem, solution, and audience are required"
+      });
+    }
+
+    console.log(`🎤 Generating pitch for: ${ideaName}`);
+
+    const prompt = `You are an expert startup pitch coach and investor relations specialist.
+
+Generate a comprehensive startup pitch package in valid JSON format ONLY.
+
+CRITICAL: Your response must be ONLY valid JSON, nothing else.
+
+Return this exact JSON structure:
+
+{
+  "elevatorPitch": "A compelling 30-second pitch (approximately 75-85 words) that grabs attention and clearly explains the startup",
+  "problemStatement": "A clear, concise problem statement (50-75 words) that defines the pain point and affected users",
+  "solutionStatement": "A compelling solution statement (75-100 words) that explains how the startup solves the problem uniquely",
+  "valueProposition": "A powerful value proposition (50-75 words) that articulates the unique benefits and competitive advantage",
+  "investorPitchOutline": {
+    "hook": "An engaging opening hook or attention-grabber (one compelling sentence)",
+    "problemSection": "Problem narrative (100-150 words) with statistics and context",
+    "solutionSection": "Solution narrative (100-150 words) explaining the approach and how it works",
+    "marketOpportunity": "Market size and opportunity (75-100 words) with TAM/SAM breakdown",
+    "competitiveAdvantage": "Why this startup wins against competitors (75-100 words)",
+    "businessModel": "Revenue model and monetization strategy (75-100 words)",
+    "teamRequirement": "What team/expertise is needed to execute (50-75 words)",
+    "financialProjections": "Key metrics and growth targets (50-75 words)",
+    "callToAction": "A compelling call-to-action for investors (one powerful sentence)"
+  },
+  "keyMessages": [
+    "Key message 1",
+    "Key message 2",
+    "Key message 3",
+    "Key message 4",
+    "Key message 5"
+  ],
+  "pitchTips": [
+    "Delivery tip 1 for presenting this pitch",
+    "Delivery tip 2 for presenting this pitch",
+    "Delivery tip 3 for presenting this pitch"
+  ]
+}
+
+STARTUP DETAILS:
+- Name: ${ideaName}
+- Problem: ${problem}
+- Solution: ${solution}
+- Target Audience: ${audience}
+- Unique Value: ${uniqueValue || "Not specified"}
+
+Now generate the pitch package as valid JSON only. Start with { and end with }. No markdown, no code blocks, no extra text.`;
+
+    console.log("📨 Sending to Groq AI...");
+    const raw = await safeGenerate(prompt);
+
+    if (!raw) {
+      console.log("❌ Groq returned null");
+      return res.status(500).json({
+        success: false,
+        message: "Failed to generate pitch from Groq"
+      });
+    }
+
+    console.log("✅ Groq response received");
+    console.log(`📊 Response length: ${raw.length} characters`);
+
+    /* ---------- Clean AI Response ---------- */
+
+    let cleaned = raw.trim();
+
+    // Remove markdown code blocks
+    if (cleaned.includes("```")) {
+      cleaned = cleaned.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();
+    }
+
+    // Find JSON object
+    const first = cleaned.indexOf("{");
+    const last = cleaned.lastIndexOf("}");
+
+    console.log(`📄 JSON brackets found at: ${first} - ${last}`);
+
+    if (first === -1 || last === -1) {
+      console.error("❌ No valid JSON brackets found in pitch response");
+      console.error("Raw response sample:", raw.substring(0, 200));
+      return res.status(500).json({
+        success: false,
+        message: "Invalid pitch response format from AI"
+      });
+    }
+
+    const jsonString = cleaned.substring(first, last + 1);
+
+    let parsed;
+
+    try {
+      console.log("🔍 Parsing JSON...");
+      parsed = JSON.parse(jsonString);
+      console.log("✅ JSON parsed successfully");
+
+      // Validate required sections
+      const requiredKeys = ["elevatorPitch", "problemStatement", "solutionStatement", "valueProposition", "investorPitchOutline", "keyMessages", "pitchTips"];
+      const missingKeys = requiredKeys.filter(key => !parsed[key]);
+
+      if (missingKeys.length > 0) {
+        console.error("❌ Missing required pitch sections:", missingKeys);
+        return res.status(500).json({
+          success: false,
+          message: "Incomplete pitch sections",
+          missing: missingKeys
+        });
+      }
+
+      console.log("✅ All required sections present");
+
+    } catch (err) {
+      console.error("❌ JSON parse error:", err.message);
+      console.error("Attempted to parse:", jsonString.substring(0, 300));
+      return res.status(500).json({
+        success: false,
+        message: "Failed to parse pitch response"
+      });
+    }
+
+    latestPitch = parsed;
+
+    console.log("✅ Pitch generated and stored successfully");
+    console.log("🎤 ====== PITCH GENERATION COMPLETE ======\n");
+
+    res.json({
+      success: true,
+      message: "Pitch generation completed",
+      startupName: ideaName,
+      sections: Object.keys(parsed),
+      generatedAt: new Date().toISOString(),
+      pitchData: parsed
+    });
+
+  } catch (err) {
+    console.error("❌ Pitch Generator Error:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate pitch"
+    });
+  }
+});
+
+/* =================================================
+   🎤 PITCH RETRIEVAL
+================================================= */
+
+app.get("/api/pitch-generator", (req, res) => {
+  try {
+    if (!latestPitch) {
+      return res.status(400).json({
+        success: false,
+        message: "No pitch generated yet. Use POST /api/pitch-generator first"
+      });
+    }
+
+    const { format } = req.query;
+
+    if (format === "elevator") {
+      return res.json({
+        success: true,
+        type: "Elevator Pitch",
+        content: latestPitch.elevatorPitch
+      });
+    }
+
+    if (format === "problem") {
+      return res.json({
+        success: true,
+        type: "Problem Statement",
+        content: latestPitch.problemStatement
+      });
+    }
+
+    if (format === "solution") {
+      return res.json({
+        success: true,
+        type: "Solution Statement",
+        content: latestPitch.solutionStatement
+      });
+    }
+
+    if (format === "investor") {
+      return res.json({
+        success: true,
+        type: "Investor Pitch Outline",
+        content: latestPitch.investorPitchOutline
+      });
+    }
+
+    if (format === "keyMessages") {
+      return res.json({
+        success: true,
+        type: "Key Messages",
+        content: latestPitch.keyMessages
+      });
+    }
+
+    if (format === "tips") {
+      return res.json({
+        success: true,
+        type: "Pitch Tips",
+        content: latestPitch.pitchTips
+      });
+    }
+
+    // Return full pitch if no specific format requested
+    res.json({
+      success: true,
+      message: "Full pitch data",
+      pitchData: latestPitch
+    });
+
+  } catch (err) {
+    console.error("❌ Pitch Retrieval Error:", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to retrieve pitch"
+    });
+  }
+});
+
+/* =================================================
+   🔧 ERROR HANDLING
+================================================= */
+
+app.use((req, res) => {
+  console.log(`⚠️  Endpoint not found: ${req.method} ${req.path}`);
+  res.status(404).json({
+    success: false,
+    message: "Endpoint not found",
+    path: req.path,
+    method: req.method,
+    availableEndpoints: [
+      "POST /analyze",
+      "GET /section/:name",
+      "GET /api/market-analysis?domain=...",
+      "GET /api/startup-news?q=...",
+      "GET /api/startup-competitors?q=...",
+      "POST /api/problem-detector",
+      "POST /api/pitch-generator",
+      "GET /api/pitch-generator"
+    ]
+  });
+});
+
+app.use((err, req, res, next) => {
+  console.error("❌ Unhandled Error:", err.message);
+  console.error("Stack:", err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Internal server error",
+    error: err.message
+  });
+});
+
+/* =================================================
+   🚀 START SERVER
+================================================= */
+
+const PORT = process.env.PORT || 3000;
+
+const server = app.listen(PORT, "0.0.0.0", () => {
+  console.log(`
+╔═══════════════════════════════════════════════════╗
+║                                                   ║
+║     🚀 STARTUP SURVIVAL AI SERVER RUNNING        ║
+║                                                   ║
+║  Port: ${PORT}                                         ║
+║  Host: 0.0.0.0 (All interfaces)                  ║
+║  AI Model: Groq (Llama 3.3 70B Versatile)       ║
+║  APIs: RapidAPI (News & Market Analysis)        ║
+║                                                   ║
+║  🔗 Local:   http://localhost:${PORT}                   ║
+║  🔗 Network: http://0.0.0.0:${PORT}                     ║
+║                                                   ║
+║  ✅ Ready to analyze startups!                   ║
+║  🎤 Ready to generate pitches!                   ║
+║                                                   ║
+║  Available endpoints:                             ║
+║  - POST /analyze                                 ║
+║  - GET /section/:name                            ║
+║  - GET /api/market-analysis                      ║
+║  - GET /api/startup-news                         ║
+║  - GET /api/startup-competitors                  ║
+║  - POST /api/problem-detector                    ║
+║  - POST /api/pitch-generator                     ║
+║  - GET /api/pitch-generator                      ║
+║                                                   ║
+╚═══════════════════════════════════════════════════╝
+  `);
+});
+
+/* Graceful shutdown */
+process.on("SIGTERM", () => {
+  console.log("📍 SIGTERM received, shutting down gracefully");
+  server.close(() => {
+    console.log("✅ Server closed");
+    process.exit(0);
+  });
+});
+
+process.on("SIGINT", () => {
+  console.log("📍 SIGINT received, shutting down gracefully");
+  server.close(() => {
+    console.log("✅ Server closed");
+    process.exit(0);
+  });
+});
 
 module.exports = app;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

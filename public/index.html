@@ -1,67 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Startup News Search</title>
-    <style>
-        body {
-            font-family: Arial;
-            padding: 20px;
-        }
-        input {
-            padding: 10px;
-            width: 300px;
-        }
-        button {
-            padding: 10px;
-            cursor: pointer;
-        }
-        .news-card {
-            border: 1px solid #ddd;
-            padding: 15px;
-            margin-top: 15px;
-            border-radius: 8px;
-        }
-    </style>
+  <title>Google Imagen-4 Generator</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 60px;
+      background: #f4f4f4;
+    }
+
+    input {
+      padding: 12px;
+      width: 300px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background: black;
+      color: white;
+      border: none;
+      margin-left: 10px;
+    }
+
+    #loading {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+    img {
+      margin-top: 30px;
+      max-width: 500px;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-<h2>🚀 Startup News Search</h2>
+  <h2>Google Imagen-4 Image Generator</h2>
 
-<input type="text" id="searchInput" placeholder="Type startup, AI, funding..." />
-<button onclick="searchNews()">Search</button>
+  <input type="text" id="prompt" placeholder="Enter image prompt..." />
+  <button onclick="generateImage()">Generate</button>
 
-<div id="newsContainer"></div>
+  <div id="loading"></div>
+  <img id="result" />
 
-<script>
-async function searchNews() {
-    const query = document.getElementById('searchInput').value;
+  <script>
+    async function generateImage() {
+      const prompt = document.getElementById("prompt").value;
+      const loading = document.getElementById("loading");
+      const img = document.getElementById("result");
 
-    if (!query) {
-        alert("Please enter something");
+      if (!prompt) {
+        alert("Enter a prompt first!");
         return;
-    }
+      }
 
-    const res = await fetch(`/search-news?q=${query}`);
-    const data = await res.json();
+      loading.innerHTML = "Generating image... ⏳";
+      img.style.display = "none";
 
-    const container = document.getElementById('newsContainer');
-    container.innerHTML = "";
-
-    if (data.data && data.data.length > 0) {
-        data.data.forEach(news => {
-            container.innerHTML += `
-                <div class="news-card">
-                    <h3>${news.title}</h3>
-                    <p>${news.summary || ''}</p>
-                    <a href="${news.link}" target="_blank">Read More</a>
-                </div>
-            `;
+      try {
+        const response = await fetch("/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ prompt })
         });
-    } else {
-        container.innerHTML = "<p>No news found.</p>";
+
+        const data = await response.json();
+
+        if (data.image) {
+          img.src = data.image;
+          img.style.display = "block";
+          loading.innerHTML = "✅ Image Generated!";
+        } else {
+          loading.innerHTML = "";
+          alert("Image generation failed");
+        }
+
+      } catch (error) {
+        loading.innerHTML = "";
+        alert("Server error");
+      }
     }
-}
-</script>
+  </script>
 
 </body>
 </html>
